@@ -1,0 +1,15 @@
+{
+  "id": "odoo-channel",
+  "name": "Odoo Discuss Channel",
+  "version": "1.0.0",
+  "description": "Odoo Discuss 渠道集成 - 支持群组和私聊，提供 odoo_api 工具和消息轮询",
+  "channels": ["odoo"],
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {}
+  },
+  "clawdbot": {
+    "extensions": ["./index.ts"]
+  }
+}
