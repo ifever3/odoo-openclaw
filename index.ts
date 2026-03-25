@@ -106,16 +106,16 @@ function formatInlineMarkdown(text: string): string {
 }
 
 function getNoticeStyle(text: string): string | null {
-  if (/^(✅|🎉|🟢|成功|已完成|已创建|已确认)/.test(text)) {
+  if (/^(✅|🎉|🟢|Success|Completed|Created|Confirmed)/.test(text)) {
     return "background:#ecfdf3;border-left:4px solid #16a34a;";
   }
-  if (/^(⚠️|⚠|提醒|注意|警告)/.test(text)) {
+  if (/^(⚠️|⚠|Reminder|Notice|Warning)/.test(text)) {
     return "background:#fffbeb;border-left:4px solid #d97706;";
   }
-  if (/^(❌|错误|失败|异常|报错)/.test(text)) {
+  if (/^(❌|Error|Failure|Exception|Error)/.test(text)) {
     return "background:#fef2f2;border-left:4px solid #dc2626;";
   }
-  if (/^(ℹ️|提示|说明|信息)/.test(text)) {
+  if (/^(ℹ️|Tip|Description|Information)/.test(text)) {
     return "background:#eff6ff;border-left:4px solid #2563eb;";
   }
   return null;
@@ -125,14 +125,14 @@ function guessEmojiTitle(text: string): { emoji: string; title: string } | null 
   const first = text.split(/\r?\n/).map((s) => s.trim()).find(Boolean) || "";
   if (!first) return null;
 
-  if (/(失败|错误|异常|报错|error)/i.test(first)) return { emoji: "❌", title: first.replace(/^(❌|错误[:：]?|失败[:：]?)/, "").trim() || "处理失败" };
-  if (/(提醒|注意|警告|warning)/i.test(first)) return { emoji: "⚠️", title: first.replace(/^(⚠️|⚠|提醒[:：]?|注意[:：]?)/, "").trim() || "请注意" };
-  if (/(采购单|purchase|rfq|po)/i.test(text)) return { emoji: "📦", title: first };
-  if (/(销售单|sale order|\bso\b)/i.test(text)) return { emoji: "🧾", title: first };
-  if (/(发票|invoice|bill)/i.test(text)) return { emoji: "💰", title: first };
-  if (/(客户|联系人|partner|supplier|vendor)/i.test(text)) return { emoji: "👤", title: first };
-  if (/(成功|已创建|已确认|已完成|完成了)/i.test(first)) return { emoji: "✅", title: first };
-  if (/(查询|结果|找到|列表|list|search|show)/i.test(first)) return { emoji: "🔎", title: first };
+  if (/error/i.test(first)) return { emoji: "❌", title: first.replace(/^(❌)/, "").trim() || "Processing failed" };
+  if (/warning/i.test(first)) return { emoji: "⚠️", title: first.replace(/^(⚠️|⚠)/, "").trim() || "Please note" };
+  if (/purchase|rfq|po/i.test(text)) return { emoji: "📦", title: first };
+  if (/sale order|\bso\b/i.test(text)) return { emoji: "🧾", title: first };
+  if (/invoice|bill/i.test(text)) return { emoji: "💰", title: first };
+  if (/partner|supplier|vendor/i.test(text)) return { emoji: "👤", title: first };
+  if (/success/i.test(first)) return { emoji: "✅", title: first };
+  if (/list|search|show/i.test(first)) return { emoji: "🔎", title: first };
   return { emoji: "✨", title: first };
 }
 
@@ -201,7 +201,7 @@ function tryBuildRecordTable(src: string[], startIndex: number): { lines: string
   if (usefulKeys.length < 2) return null;
 
   const tableLines = [
-    `| 项目 | ${usefulKeys.join(" | ")} |`,
+    `| Item | ${usefulKeys.join(" | ")} |`,
     `| ${["---", ...usefulKeys.map(() => "---")].join(" | ")} |`,
     ...records.map((record) => `| ${record.title} | ${usefulKeys.map((key) => record.fields[key] || "-").join(" | ")} |`),
     "",
@@ -299,7 +299,7 @@ function preprocessForOdooRichText(text: string): string {
       continue;
     }
 
-    if (/^(接下来|你还可以|下一步|可继续|可执行)/.test(line)) {
+    if (/^(Next|You can also|Next step|Can continue|Can execute)/.test(line)) {
       out.push(`### 👉 ${line}`);
       i += 1;
       continue;
@@ -711,7 +711,7 @@ const plugin = {
               const cleaned = cleanOdooBody(msg.body ?? "");
               const looksLikeBotEcho = (!msg.author_id?.[0] || msg.author_id?.[0] === cfg.botPartnerId)
                 && !!cleaned
-                && /OpenClaw|我是|我看到了|对，你说得对|这个动作影响比较大|JSON-2/i.test(cleaned);
+                && /OpenClaw|I am|I see|Yes, you're right|This action has a significant impact|JSON-2/i.test(cleaned);
               if (looksLikeBotEcho) {
                 api.logger?.info(`odoo-channel: skipping suspected bot echo messageId=${msg.id}`);
                 continue;
