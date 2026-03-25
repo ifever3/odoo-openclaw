@@ -272,7 +272,7 @@ function preprocessForOdooRichText(text: string): string {
       j += 1;
     }
     if (kvRows.length >= 2) {
-      out.push("| 字段 | 内容 |", "| --- | --- |");
+      out.push("| Field | Value |", "| --- | --- |");
       for (const row of kvRows) {
         out.push(`| ${row.key} | ${row.value} |`);
       }
